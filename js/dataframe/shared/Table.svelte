@@ -167,6 +167,7 @@
 	let old_val: undefined | (string | number)[][] = undefined;
 
 	async function trigger_change(): Promise<void> {
+		console.log("trigger_change");
 		dispatch("change");
 		if (!value_is_output) {
 			dispatch("input");

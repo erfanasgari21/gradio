@@ -1,5 +1,28 @@
 # gradio
 
+## 5.13.0
+
+### Features
+
+- [#10359](https://github.com/gradio-app/gradio/pull/10359) [`c44da25`](https://github.com/gradio-app/gradio/commit/c44da259feb3e27e155654d0c229ed299cdd40c6) - Allow modifying the chatbot value directly in `gr.ChatInterface`.  Thanks @abidlabs!
+- [#10367](https://github.com/gradio-app/gradio/pull/10367) [`5881296`](https://github.com/gradio-app/gradio/commit/5881296ea59a4f4fcb5be79b21180bb4aae31ef2) - Improve component docstrings and misc docs.  Thanks @abidlabs!
+- [#10341](https://github.com/gradio-app/gradio/pull/10341) [`b0cf92f`](https://github.com/gradio-app/gradio/commit/b0cf92f03ba29f29fa540de8c5803a7263df0106) - PWA icon customization.  Thanks @whitphx!
+- [#10352](https://github.com/gradio-app/gradio/pull/10352) [`6a7cfc4`](https://github.com/gradio-app/gradio/commit/6a7cfc4264822209148ad07d8f38a0550bdb32b7) - Compatibility between Client and ZeroGPU.  Thanks @abidlabs!
+- [#10366](https://github.com/gradio-app/gradio/pull/10366) [`b10f5e1`](https://github.com/gradio-app/gradio/commit/b10f5e150a048ded255efdd34cfb7d5706ae2ff7) - Lite: retry install.  Thanks @whitphx!
+- [#10376](https://github.com/gradio-app/gradio/pull/10376) [`2b7ba48`](https://github.com/gradio-app/gradio/commit/2b7ba4801398b6dd6b72496ea50245a0cd6852d6) - Add `show_row_numbers` param to gr.Dataframe.  Thanks @hannahblair!
+- [#10368](https://github.com/gradio-app/gradio/pull/10368) [`8cf0461`](https://github.com/gradio-app/gradio/commit/8cf0461e36a9e1d5ada95bca2215a29592f29206) - Fix ReDoS.  Thanks @kevinbackhouse!
+- [#10346](https://github.com/gradio-app/gradio/pull/10346) [`43e05d7`](https://github.com/gradio-app/gradio/commit/43e05d72f43c9ac8dc18e4b885c9da08605b09e6) - Document additional helper classes for `gr.Chatbot`.  Thanks @abidlabs!
+- [#10340](https://github.com/gradio-app/gradio/pull/10340) [`a91cb9c`](https://github.com/gradio-app/gradio/commit/a91cb9c42c02b70273b4cd55ab18148a7436fe57) - Add `show_reset_button` to `gr.slider` initialization.  Thanks @amanchauhan11!
+
+### Fixes
+
+- [#10369](https://github.com/gradio-app/gradio/pull/10369) [`eb85edf`](https://github.com/gradio-app/gradio/commit/eb85edf4b27b33038c0923387d6d1a6f57a73980) - Quick fix: 0 is ignored Slider/Number issue.  Thanks @dawoodkhan82!
+- [#10365](https://github.com/gradio-app/gradio/pull/10365) [`40e0c48`](https://github.com/gradio-app/gradio/commit/40e0c4832060cef457406896b2ad94639888897a) - Ensure clicking on a cell once enables editing mode.  Thanks @hannahblair!
+- [#10383](https://github.com/gradio-app/gradio/pull/10383) [`9517043`](https://github.com/gradio-app/gradio/commit/951704346cff56f4a781605d8f323f9113975eb0) - Ensure columns hidden with pandas `.hide()` works as expected.  Thanks @hannahblair!
+- [#10348](https://github.com/gradio-app/gradio/pull/10348) [`62cd4ef`](https://github.com/gradio-app/gradio/commit/62cd4ef302cd7529d1f8842b416f9d8fcf6b5750) - Handle `row_count=0` in gr.Dataframe.  Thanks @hannahblair!
+- [#10360](https://github.com/gradio-app/gradio/pull/10360) [`31cccc3`](https://github.com/gradio-app/gradio/commit/31cccc3e79a3d1b4a840610d9becb235f8829b13) - Fix logic for detecting changes in `gr.Dataframe` table value.  Thanks @abidlabs!
+- [#10372](https://github.com/gradio-app/gradio/pull/10372) [`96bbde2`](https://github.com/gradio-app/gradio/commit/96bbde277e059f79bb2c9898576050e84dab147a) - Allow propogation of fill_height through Rows and Tabs, via scale.  Thanks @aliabid94!
+
 ## 5.12.0
 
 ### Features

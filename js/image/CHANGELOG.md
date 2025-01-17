@@ -1,5 +1,12 @@
 # @gradio/image
 
+## 0.20.2
+
+### Dependency updates
+
+- @gradio/upload@0.14.6
+- @gradio/wasm@0.17.0
+
 ## 0.20.1
 
 ### Fixes

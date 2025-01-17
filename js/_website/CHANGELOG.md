@@ -1,5 +1,18 @@
 # website
 
+## 0.47.0
+
+### Features
+
+- [#10346](https://github.com/gradio-app/gradio/pull/10346) [`43e05d7`](https://github.com/gradio-app/gradio/commit/43e05d72f43c9ac8dc18e4b885c9da08605b09e6) - Document additional helper classes for `gr.Chatbot`.  Thanks @abidlabs!
+- [#10355](https://github.com/gradio-app/gradio/pull/10355) [`070cab5`](https://github.com/gradio-app/gradio/commit/070cab5d2e5fd3aabf4b1020e46b892446308ace) - Expand token length for existing code and prompt in playground.  Thanks @aliabd!
+
+### Dependency updates
+
+- @gradio/tabitem@0.4.1
+- @gradio/tabs@0.4.1
+- @gradio/code@0.10.13
+
 ## 0.46.0
 
 ### Features

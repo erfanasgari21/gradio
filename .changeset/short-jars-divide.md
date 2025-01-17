@@ -1,6 +1,6 @@
 ---
-"@gradio/dataframe": minor
-"gradio": minor
+"@gradio/dataframe": patch
+"gradio": patch
 ---
 
-feat:Fix `.change()` and `.input()` events in `gr.DataFrame`
+fix:Fix `.change()` and `.input()` events in `gr.DataFrame`

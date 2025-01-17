@@ -145,6 +145,7 @@
 	let old_headers: string[] | undefined;
 
 	$: {
+		c
 		if (!dequal(headers, old_headers)) {
 			trigger_headers();
 		}
@@ -152,7 +153,6 @@
 
 	function trigger_headers(): void {
 		_headers = make_headers(headers);
-
 		old_headers = headers.slice();
 		trigger_change();
 	}
@@ -413,7 +413,7 @@
 		selected = [index !== undefined ? index : data.length - 1, 0];
 	}
 
-	$: (data || selected_header) && trigger_change();
+	$: data && trigger_change();
 
 	async function add_col(index?: number): Promise<void> {
 		parent.focus();

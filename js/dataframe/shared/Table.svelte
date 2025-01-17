@@ -10,7 +10,7 @@
 	import type { I18nFormatter } from "js/core/src/gradio_helper";
 	import { type Client } from "@gradio/client";
 	import VirtualTable from "./VirtualTable.svelte";
-	import type { Headers, HeadersWithIDs, Metadata, Datatype } from "./utils";
+	import type { Headers, HeadersWithIDs, Datatype } from "./utils";
 	import CellMenu from "./CellMenu.svelte";
 	import { 
 		make_id, 
@@ -18,6 +18,7 @@
 		data_uri_to_blob,
 		get_max,
 	} from "./utils";
+	import TableHeader from "./TableHeader.svelte";
 
 	export let datatype: Datatype | Datatype[];
 	export let label: string | null = null;
@@ -328,20 +329,6 @@
 	type SortDirection = "asc" | "des";
 	let sort_direction: SortDirection | undefined;
 	let sort_by: number | undefined;
-
-	function get_sort_status(
-		name: string,
-		_sort?: number,
-		direction?: SortDirection
-	): "none" | "ascending" | "descending" {
-		if (!_sort) return "none";
-		if (headers[_sort] === name) {
-			if (direction === "asc") return "ascending";
-			if (direction === "des") return "descending";
-		}
-
-		return "none";
-	}
 
 	function handle_sort(col: number): void {
 		if (typeof sort_by !== "number" || sort_by !== col) {
@@ -726,46 +713,26 @@
 				<caption class="sr-only">{label}</caption>
 			{/if}
 			<thead>
-				<tr>
-					{#if show_row_numbers}
-						<th class="row-number-header"></th>
-					{/if}
-					{#each _headers as { value, id }, i (id)}
-						<th
-							class:editing={header_edit === i}
-							aria-sort={get_sort_status(value, sort_by, sort_direction)}
-							style:width={column_widths.length ? column_widths[i] : undefined}
-						>
-							<div class="cell-wrap">
-								<EditableCell
-									{value}
-									{latex_delimiters}
-									{line_breaks}
-									header
-									edit={false}
-									el={null}
-									{root}
-								/>
-
-								<div
-									class:sorted={sort_by === i}
-									class:des={sort_by === i && sort_direction === "des"}
-									class="sort-button {sort_direction} "
-								>
-									<svg
-										width="1em"
-										height="1em"
-										viewBox="0 0 9 7"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path d="M4.49999 0L8.3971 6.75H0.602875L4.49999 0Z" />
-									</svg>
-								</div>
-							</div>
-						</th>
-					{/each}
-				</tr>
+				<TableHeader
+					headers={_headers}
+					{editable}
+					{latex_delimiters}
+					{line_breaks}
+					{root}
+					{i18n}
+					{col_count}
+					{row_count}
+					{show_row_numbers}
+					{sort_by}
+					{sort_direction}
+					{els}
+					on:sort={({ detail }) => handle_sort(detail.index)}
+					on:edit_header={({ detail }) => {
+						headers[detail.index] = detail.value;
+						trigger_headers();
+					}}
+					on:add_column={({ detail }) => add_col_at(detail.index, detail.position)}
+				/>
 			</thead>
 			<tbody>
 				<tr>
@@ -805,69 +772,28 @@
 				bind:table_scrollbar_width={scrollbar_width}
 				selected={selected_index}
 			>
-				{#if label && label.length !== 0}
-					<caption class="sr-only">{label}</caption>
-				{/if}
-				<tr slot="thead">
-					{#if show_row_numbers}
-						<th class="row-number-header"></th>
-					{/if}
-					{#each _headers as { value, id }, i (id)}
-						<th
-							class:focus={header_edit === i || selected_header === i}
-							aria-sort={get_sort_status(value, sort_by, sort_direction)}
-							style="width: var(--cell-width-{i});"
-							on:click={() => {
-								toggle_header_button(i);
-							}}
-						>
-							<div class="cell-wrap">
-								<div class="header-content">
-									<EditableCell
-										bind:value={_headers[i].value}
-										bind:el={els[id].input}
-										{latex_delimiters}
-										{line_breaks}
-										edit={header_edit === i}
-										on:keydown={end_header_edit}
-										on:dblclick={() => edit_header(i)}
-										header
-										{root}
-									/>
-									<button
-										class:sorted={sort_by === i}
-										class:des={sort_by === i && sort_direction === "des"}
-										class="sort-button {sort_direction}"
-										tabindex="0"
-										on:click={(event) => {
-											event.stopPropagation();
-											handle_sort(i);
-										}}
-									>
-										<svg
-											width="1em"
-											height="1em"
-											viewBox="0 0 9 7"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-										>
-											<path d="M4.49999 0L8.3971 6.75H0.602875L4.49999 0Z" />
-										</svg>
-									</button>
-								</div>
-
-								{#if editable}
-									<button
-										class="cell-menu-button"
-										on:click={(event) => toggle_header_menu(event, i)}
-									>
-										⋮
-									</button>
-								{/if}
-							</div>
-						</th>
-					{/each}
-				</tr>
+				<svelte:fragment slot="thead">
+					<TableHeader
+						headers={_headers}
+						{editable}
+						{latex_delimiters}
+						{line_breaks}
+						{root}
+						{i18n}
+						{col_count}
+						{row_count}
+						{show_row_numbers}
+						{sort_by}
+						{sort_direction}
+						{els}
+						on:sort={({ detail }) => handle_sort(detail.index)}
+						on:edit_header={({ detail }) => {
+							headers[detail.index] = detail.value;
+							trigger_headers();
+						}}
+						on:add_column={({ detail }) => add_col_at(detail.index, detail.position)}
+					/>
+				</svelte:fragment>
 
 				<tr slot="tbody" let:item let:index class:row_odd={index % 2 === 0}>
 					{#if show_row_numbers}

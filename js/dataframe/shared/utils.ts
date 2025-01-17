@@ -45,6 +45,8 @@ export function data_uri_to_blob(data_uri: string): Blob {
 	return new Blob([ab], { type: mime_str });
 }
 
+export type SortDirection = "asc" | "des";
+
 export function get_max<T extends { value: any }>(data: T[][]): T[] {
 	if (!data || data.length === 0 || !data[0]) return [];
 	let max = data[0].slice();

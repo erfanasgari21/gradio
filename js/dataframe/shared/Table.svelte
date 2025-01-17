@@ -16,9 +16,7 @@
 		make_id, 
 		guess_delimiter, 
 		data_uri_to_blob,
-		get_sort_status,
 		get_max,
-		type SortDirection
 	} from "./utils";
 
 	export let datatype: Datatype | Datatype[];

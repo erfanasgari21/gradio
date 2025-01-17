@@ -58,11 +58,15 @@
 	}>();
 
 	let editing: false | [number, number] = false;
+	let last_selected: [number, number] | null = null;
+	let els: Record<
+		string,
+		{ cell: null | HTMLTableCellElement; input: null | HTMLInputElement }
+	> = {};
+	let data_binding: Record<string, (typeof data)[0][0]> = {};
 
 	const get_data_at = (row: number, col: number): string | number =>
 		data?.[row]?.[col]?.value;
-
-	let last_selected: [number, number] | null = null;
 
 	$: {
 		if (selected !== false && !dequal(selected, last_selected)) {
@@ -77,13 +81,6 @@
 			}
 		}
 	}
-
-	let els: Record<
-		string,
-		{ cell: null | HTMLTableCellElement; input: null | HTMLInputElement }
-	> = {};
-
-	let data_binding: Record<string, (typeof data)[0][0]> = {};
 
 	function make_headers(_head: Headers): HeadersWithIDs {
 		let _h = _head || [];
@@ -589,8 +586,6 @@
 			observer.disconnect();
 		};
 	});
-
-	let highlighted_column: number | null = null;
 
 	let active_cell_menu: {
 		row: number;

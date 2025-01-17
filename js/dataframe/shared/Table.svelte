@@ -12,6 +12,14 @@
 	import VirtualTable from "./VirtualTable.svelte";
 	import type { Headers, HeadersWithIDs, Metadata, Datatype } from "./utils";
 	import CellMenu from "./CellMenu.svelte";
+	import { 
+		make_id, 
+		guess_delimiter, 
+		data_uri_to_blob,
+		get_sort_status,
+		get_max,
+		type SortDirection
+	} from "./utils";
 
 	export let datatype: Datatype | Datatype[];
 	export let label: string | null = null;
@@ -79,10 +87,6 @@
 
 	let data_binding: Record<string, (typeof data)[0][0]> = {};
 
-	function make_id(): string {
-		return Math.random().toString(36).substring(2, 15);
-	}
-
 	function make_headers(_head: Headers): HeadersWithIDs {
 		let _h = _head || [];
 		if (col_count[1] === "fixed" && _h.length < col_count[0]) {
@@ -145,7 +149,6 @@
 	let old_headers: string[] | undefined;
 
 	$: {
-		c
 		if (!dequal(headers, old_headers)) {
 			trigger_headers();
 		}
@@ -172,20 +175,6 @@
 		if (!value_is_output) {
 			dispatch("input");
 		}
-	}
-
-	function get_sort_status(
-		name: string,
-		_sort?: number,
-		direction?: SortDirection
-	): "none" | "ascending" | "descending" {
-		if (!_sort) return "none";
-		if (headers[_sort] === name) {
-			if (direction === "asc") return "ascending";
-			if (direction === "des") return "descending";
-		}
-
-		return "none";
 	}
 
 	function get_current_indices(id: string): [number, number] {
@@ -345,6 +334,20 @@
 	let sort_direction: SortDirection | undefined;
 	let sort_by: number | undefined;
 
+	function get_sort_status(
+		name: string,
+		_sort?: number,
+		direction?: SortDirection
+	): "none" | "ascending" | "descending" {
+		if (!_sort) return "none";
+		if (headers[_sort] === name) {
+			if (direction === "asc") return "ascending";
+			if (direction === "des") return "descending";
+		}
+
+		return "none";
+	}
+
 	function handle_sort(col: number): void {
 		if (typeof sort_by !== "number" || sort_by !== col) {
 			sort_direction = "asc";
@@ -466,51 +469,13 @@
 		active_header_menu = null;
 	}
 
-	function guess_delimitaor(
-		text: string,
-		possibleDelimiters: string[]
-	): string[] {
-		return possibleDelimiters.filter(weedOut);
-
-		function weedOut(delimiter: string): boolean {
-			var cache = -1;
-			return text.split("\n").every(checkLength);
-
-			function checkLength(line: string): boolean {
-				if (!line) {
-					return true;
-				}
-
-				var length = line.split(delimiter).length;
-				if (cache < 0) {
-					cache = length;
-				}
-				return cache === length && length > 1;
-			}
-		}
-	}
-
-	function data_uri_to_blob(data_uri: string): Blob {
-		const byte_str = atob(data_uri.split(",")[1]);
-		const mime_str = data_uri.split(",")[0].split(":")[1].split(";")[0];
-
-		const ab = new ArrayBuffer(byte_str.length);
-		const ia = new Uint8Array(ab);
-
-		for (let i = 0; i < byte_str.length; i++) {
-			ia[i] = byte_str.charCodeAt(i);
-		}
-
-		return new Blob([ab], { type: mime_str });
-	}
-
 	function blob_to_string(blob: Blob): void {
 		const reader = new FileReader();
 
 		function handle_read(e: ProgressEvent<FileReader>): void {
 			if (!e?.target?.result || typeof e.target.result !== "string") return;
 
-			const [delimiter] = guess_delimitaor(e.target.result, [",", "\t"]);
+			const [delimiter] = guess_delimiter(e.target.result, [",", "\t"]);
 
 			const [head, ...rest] = dsvFormat(delimiter).parseRows(e.target.result);
 
@@ -528,22 +493,6 @@
 	}
 
 	let dragging = false;
-
-	function get_max(
-		_d: { value: any; id: string }[][]
-	): { value: any; id: string }[] {
-		if (!_d || _d.length === 0 || !_d[0]) return [];
-		let max = _d[0].slice();
-		for (let i = 0; i < _d.length; i++) {
-			for (let j = 0; j < _d[i].length; j++) {
-				if (`${max[j].value}`.length < `${_d[i][j].value}`.length) {
-					max[j] = _d[i][j];
-				}
-			}
-		}
-
-		return max;
-	}
 
 	$: max = get_max(data);
 
